@@ -2,6 +2,25 @@ GherkinAutocompletePlus
 ====================
 GherkinAutocompletePlus is a [Sublime Text](http://www.sublimetext.com/) plugin that will catalog Gherkin step definitions from the `*.feature` files of the provided directory, and provide autocomplete suggestions based on the catalogued steps.
 
+Why should I use this instead of [enter alternative plugin here]?
+---
+* It doesn't auto-commit selected Autocomplete entry on <kbd>space</kbd>, so it won't interrupt your workflow as much
+* When cataloguing steps, it strips out values in between quotes (single and double), less- and greater-than signs, and numbers in 'integer' and 'decimal' format. This keeps duplicates out of the step list.
+* When filling autocomplete list, it formats the steps in snippet notation
+
+
+Example:
+
+
+![scenarios](/images/scenario.png)
+
+
+will create the following steps
+
+
+![steps](/images/steps.png)
+
+
 Installation
 -------------
 1. Open Sublime Text
