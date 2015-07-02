@@ -1,0 +1,12 @@
+# Soon To Be Deprecated #
+#########################
+/FeatureTests
+steps.txt
+
+# OS generated files #
+######################
+.DS_Store
+
+# Editor Files #
+################
+*.sublime-workspace
