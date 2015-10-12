@@ -1,4 +1,0 @@
-[
-    // To modify this keybinding, open the 'Keybindings - User' under 'Preferences'
-    { "keys": ["ctrl+k", "ctrl+z"], "command": "update_steps" }
-]

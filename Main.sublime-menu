@@ -1,24 +1,5 @@
 [
     {
-        "caption": "Tools",
-        "mnemonic": "t",
-        "id": "tools",
-        "children":
-        [
-            {
-                "caption": "GherkinAutocompletePlus",
-                "id": "packagecommands",
-                "children":
-                [
-                    {
-                        "command": "update_steps",
-                        "caption": "Update Steps"
-                    }
-                ]
-            }
-        ]
-    },
-    {
         "caption": "Preferences",
         "id": "preferences",
         "mnemonic": "n",
@@ -37,18 +18,12 @@
                             {
                                 "command": "open_file",
                                 "args": {"file": "${packages}/GherkinAutocompletePlus/gherkin_autocomplete_plus.sublime-settings"},
-                                "caption": "Settings - Default"
+                                "caption": "Settings – Default"
                             },
                             {
                                 "command": "open_file",
                                 "args": {"file": "${packages}/User/gherkin_autocomplete_plus.sublime-settings"},
                                 "caption": "Settings – User"
-                            },
-                            { "caption": "-" },
-                            {
-                                "command": "open_file",
-                                "args": {"file": "${packages}/GherkinAutocomplete/Default.sublime-keymap"},
-                                "caption": "Keymap - Default"
                             }
                         ]
                     }
