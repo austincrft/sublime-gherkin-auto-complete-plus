@@ -12,17 +12,17 @@
                 "children":
                 [
                     {
-                        "caption": "GherkinAutocompletePlus",
+                        "caption": "Gherkin Auto-Complete Plus",
                         "children":
                         [
                             {
                                 "command": "open_file",
-                                "args": {"file": "${packages}/GherkinAutocompletePlus/gherkin_autocomplete_plus.sublime-settings"},
+                                "args": {"file": "${packages}/gherkin_auto_complete_plus/gherkin_auto_complete_plus.sublime-settings"},
                                 "caption": "Settings – Default"
                             },
                             {
                                 "command": "open_file",
-                                "args": {"file": "${packages}/User/gherkin_autocomplete_plus.sublime-settings"},
+                                "args": {"file": "${packages}/User/gherkin_auto_complete_plus.sublime-settings"},
                                 "caption": "Settings – User"
                             }
                         ]

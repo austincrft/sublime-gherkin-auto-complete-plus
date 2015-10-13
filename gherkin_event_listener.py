@@ -1,7 +1,7 @@
 import sublime
 import sublime_plugin
 import re
-import GherkinAutocompletePlus.update_steps as update_steps
+import gherkin_auto_complete_plus.update_steps as update_steps
 
 settings = sublime.load_settings('gherkin_autocomplete_plus.sublime-settings')
 filepath = settings.get('step_path')
@@ -12,7 +12,7 @@ steps = []
 
 class GherkinEventListener(sublime_plugin.EventListener):
     """
-    Sublime Text Gherkin AutoComplete integration
+    Sublime Text Event Listener
     """
 
     def __init__(self):
@@ -70,9 +70,20 @@ class GherkinEventListener(sublime_plugin.EventListener):
         return sorted(_completions)
 
     def on_post_save_async(self, view):
-        self._update_steps()
+        """ Sublime Text 'On File Save' event handler
+
+        Updates the step catolog after file save in Gherkin syntax
+
+        :param view: `sublime.View` object
+        :type view: sublime.View
+        """
+        if self._is_gherkin_scope(view):
+            self._update_steps()
 
     def _update_steps(self):
+        """ Executes the 'run' method of the 'update_steps' module
+            and stores the results in the 'steps' variable
+        """
         steps.clear()
         [steps.append(step) for step in update_steps.run()]
 
@@ -162,8 +173,7 @@ class GherkinEventListener(sublime_plugin.EventListener):
         sublime.set_timeout(_show_auto_complete, 0)
 
     def _fill_completions(self, view, location):
-        """ Gets completions from file specified in 'step_path' and adds them to
-            'completions' list
+        """ Prepares completions for auto-complete list
 
         :param view: `sublime.View` object
         :type view: sublime.View

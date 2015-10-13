@@ -10,6 +10,11 @@ feature_error = ('GherkinAutocompletePlus: \nPlease specify a path to the direct
 
 
 def is_int(s):
+    """ Evaluates whether provided string is an integer
+
+    :param s: input string
+    :type s: str
+    """
     try:
         int(s)
         return True
@@ -17,31 +22,43 @@ def is_int(s):
         return False
 
 
-def format_step(line):
+def format_step(step):
+    """ Formats Gherkin step in snippet notation
+
+    :param step: Gherkin step
+    :type step: str
+
+    :return: str
+    """
     # SWEET MOTHER OF REGEX!
     # Get values in between single- and double-quotes,
     # values in between greater- and less-than signs,
     # and numbers in 'integer' and 'decimal' format
     replace_values = re.findall(
         r'((?:\".+?\")|(?:\'.+?\')|(?:\<.+?\>)|(?:\d+(?:\.\d*)?|(?:\.\d+)))',
-        line)
+        step)
 
     for word in replace_values:
         if word:
             if word[0] == '"':
-                line = line.replace(word, '"input"', 1)
+                step = step.replace(word, '"input"', 1)
             elif word[0] == "'":
-                line = line.replace(word, "'input'", 1)
+                step = step.replace(word, "'input'", 1)
             elif word[0] == '<':
-                line = line.replace(word, '<input>', 1)
+                step = step.replace(word, '<input>', 1)
             elif is_int(word[0]) or word[0] == '.':
-                line = line.replace(word, "[number]", 1)
+                step = step.replace(word, "[number]", 1)
 
-    return line
+    return step
 
 
 def run():
-    settings = sublime.load_settings('gherkin_autocomplete_plus.sublime-settings')
+    """ Main method of the module, iterates through directories provided
+        in the settings to store and format the Gherkin steps.
+
+    :return: list(tuple(str, str))
+    """
+    settings = sublime.load_settings('gherkin_auto_complete_plus.sublime-settings')
     feature_file_directories = settings.get('feature_file_directories')
 
     if not feature_file_directories:
