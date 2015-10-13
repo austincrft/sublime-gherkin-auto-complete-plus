@@ -1,0 +1,8 @@
+{
+    // A collection of the directories containing the features files you would like to scan
+    "feature_file_directories":
+    [
+      // Uncomment this and alter the path
+      // "path/to/featurefiles/directory",
+    ]
+}

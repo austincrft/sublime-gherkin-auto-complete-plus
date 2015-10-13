@@ -1,7 +1,0 @@
-{
-    // The directory containing the features files you would like to scan
-    "feature_file_directory": "path/to/featurefiles/directory",
-
-    // The path to the file you would like to contain the steps
-    "step_path": "path/to/steps.txt"
-}
