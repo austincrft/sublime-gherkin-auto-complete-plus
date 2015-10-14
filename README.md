@@ -34,10 +34,10 @@ Absolutely, yes. It's intended to be tongue-in-cheek, but also I couldn't think 
     cd ~/Library/Application\ Support/Sublime\ Text\ 3/Packages
     git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git
 #### Linux
-    cd ~/.config/sublime-text-3/Installed Packages
+    cd ~/.config/sublime-text-3/Installed\ Packages
     git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git
 #### Windows
-    cd Users/<user>/AppData/Roaming/Sublime\ Text\ 3/Installed Packages/
+    cd Users/<user>/AppData/Roaming/Sublime\ Text\ 3/Installed\ Packages/
     git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git
 
 
