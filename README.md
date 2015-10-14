@@ -29,7 +29,7 @@ Absolutely, yes. It's intended to be tongue-in-cheek, but also I couldn't think 
 
 ## Installation
 #### Automatic - via [Package Control](https://packagecontrol.io/)
-    Search for 'gherkin_auto-complete_plus'
+    Search for 'gherkin_auto_complete_plus'
 #### Mac OSX
     cd ~/Library/Application\ Support/Sublime\ Text\ 3/Packages
     git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git gherkin_auto_complete_plus
