@@ -1,10 +1,9 @@
 import sublime
 import sublime_plugin
 import re
-import gherkin_auto_complete_plus.update_steps as update_steps
+from . import update_steps
 
-settings = sublime.load_settings('gherkin_autocomplete_plus.sublime-settings')
-filepath = settings.get('step_path')
+
 keywords = ['given', 'when', 'then']
 completions = {}
 steps = []
@@ -204,7 +203,7 @@ class GherkinEventListener(sublime_plugin.EventListener):
                     break
 
         if not last_keyword:
-            print("GherkinAutocompletePlus: Could not find 'Given', 'When', "
+            print("Gherkin Auto-Complete Plus: Could not find 'Given', 'When', "
                   "or 'Then' in text.")
             return
 

@@ -29,16 +29,16 @@ Absolutely, yes. It's intended to be tongue-in-cheek, but also I couldn't think 
 
 ## Installation
 #### Automatic - via [Package Control](https://packagecontrol.io/)
-    Search for 'gherkin_auto_complete_plus'
+    Search for 'Gherkin Auto-Complete Plus'
 #### Mac OSX
     cd ~/Library/Application\ Support/Sublime\ Text\ 3/Packages
-    git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git gherkin_auto_complete_plus
+    git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git GherkinAutoCompletePlus
 #### Linux
     cd ~/.config/sublime-text-3/Installed\ Packages
-    git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git gherkin_auto_complete_plus
+    git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git GherkinAutoCompletePlus
 #### Windows
     cd Users/<user>/AppData/Roaming/Sublime\ Text\ 3/Installed\ Packages/
-    git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git gherkin_auto_complete_plus
+    git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git GherkinAutoCompletePlus
 
 
 ## Config/Setup
