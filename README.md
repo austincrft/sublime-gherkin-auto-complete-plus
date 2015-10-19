@@ -25,6 +25,7 @@ Absolutely, yes. It's intended to be tongue-in-cheek, but also I couldn't think 
 * Relies on the first word of the line being a keyword (`Given`, `When`, `Then`) in order to give auto-complete suggestions
 * If the line begins with `And` or `But`, the previous keyword will be used
 * It is not recommended that this is used alongside [cucumber-sublime-bundle](https://github.com/drewda/cucumber-sublime-bundle), as the bundled auto-complete will interfere with the results. At the moment, I've included the Gherkin syntax file so that this plugin can be self-contained, but I'll be contacting the owner of that bundle to see what we can work out.
+* **This package is only compatible with Sublime Text 3. It will not work on Sublime Text 2.**
 
 
 ## Installation
