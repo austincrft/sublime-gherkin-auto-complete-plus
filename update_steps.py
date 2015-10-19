@@ -58,7 +58,7 @@ def run():
 
     :return: list(tuple(str, str))
     """
-    settings = sublime.load_settings('gherkin_auto_complete_plus.sublime-settings')
+    settings = sublime.load_settings('GherkinAutoCompletePlus.sublime-settings')
     feature_file_directories = settings.get('feature_file_directories')
 
     if not feature_file_directories:
