@@ -33,13 +33,13 @@ Absolutely, yes. It's intended to be tongue-in-cheek, but also I couldn't think 
     Search for 'Gherkin Auto-Complete Plus'
 #### Mac OSX
     cd ~/Library/Application\ Support/Sublime\ Text\ 3/Packages
-    git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git GherkinAutoCompletePlus
+    git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git "Gherkin Auto-Complete Plus"
 #### Linux
     cd ~/.config/sublime-text-3/Installed\ Packages
-    git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git GherkinAutoCompletePlus
+    git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git "Gherkin Auto-Complete Plus"
 #### Windows
     cd Users/<user>/AppData/Roaming/Sublime\ Text\ 3/Installed\ Packages/
-    git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git GherkinAutoCompletePlus
+    git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git "Gherkin Auto-Complete Plus"
 
 
 ## Config/Setup
