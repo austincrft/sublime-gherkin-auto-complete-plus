@@ -59,4 +59,4 @@ Absolutely, yes. It's intended to be tongue-in-cheek, but also I couldn't think 
 
 
 ## Credits
-The Gherkin syntax highlighting (file `Cucumber Plain Text Feature.tmLanguage`), was taken from [@drewda](https://github.com/drewda)'s [cucumber-sublime-bundle](https://github.com/drewda/cucumber-sublime-bundle) repository.
+The accompanied `*.tmLanguage` files were taken from [@drewda](https://github.com/drewda)'s [cucumber-sublime-bundle](https://github.com/drewda/cucumber-sublime-bundle) repository.
