@@ -1,104 +1,117 @@
 import glob
 import re
-import sublime
-import sublime_plugin
 
-feature_error = ('Gherkin Auto-Complete Plus: \nPlease specify a path to the directory'
-                 ' containing your Feature Files. Go to \n\n"Preferences -> '
-                 'Package Settings -> Gherkin Auto-Complete Plus -> Settings - User"'
-                 '\n\n and create an entry for "feature_file_directories".')
+main_words = ['given', 'when', 'then']
+extra_words = ['and', 'but']
 
 
-def _is_int(s):
-    """ Evaluates whether provided string is an integer
+def _get_feature_files(directories):
+    """ Gets all *.feature files under the provided directories
 
-    :param s: input string
-    :type s: str
+    :param [str] directories: a list of directory names
+    :rtype: set of (str, str)
     """
-    try:
-        int(s)
-        return True
-    except ValueError:
-        return False
+    if directories is None:
+        directories = []
+
+    files = set()
+    for path in directories:
+        if not path.endswith('/'):
+            path += '/'
+        files.update(glob.glob(path + '*.feature'))
+    return files
 
 
-def _format_step(step):
-    """ Formats Gherkin step in snippet notation
+def _get_steps(files):
+    """ Gets all Gherkin steps from provided files
 
-    :param str step: Gherkin step
-    :return: formateted Gherkin step
-    :rtype: str
+    :param [str] files: feature files
+    :rtype: set of (str, str)
     """
+    if files is None:
+        files = []
+
+    last_main_word = ''
+    steps = set()
+
+    for file_ in files:
+        with open(file_) as feature:
+            for line in feature.readlines():
+                # Separate keyword from line
+                line_split = line.split(maxsplit=1)
+
+                # Skip line if no step body is present
+                if len(line_split) < 2:
+                    continue
+
+                first_word = line_split[0].lower()
+
+                if first_word in main_words:
+                    last_main_word = first_word.lower()
+                elif first_word in extra_words:
+                    pass
+                else:
+                    continue
+
+                line = line_split[1].strip()
+                step = (last_main_word, line)
+                steps.add(step)
+    return steps
+
+
+def _format_steps(steps):
+    """ Formats steps in a uniform way to avoid duplicate steps in results
+
+    :param steps: Gherkin steps paired with their keywords e.g. (keyword, step)
+    :type steps: set of (str, str)
+    :rtype: set of (str, str)
+    """
+    if steps is None:
+        steps = []
+
+    formatted_steps = set()
+
     # SWEET MOTHER OF REGEX!
     # Get values in between single- and double-quotes,
     # values in between greater- and less-than signs,
     # and numbers in 'integer' and 'decimal' format
-    replace_values = re.findall(
-        r'((?:\".+?\")|(?:\'.+?\')|(?:\<.+?\>)|(?:\d+(?:\.\d*)?|(?:\.\d+)))',
-        step)
+    regex = r'((?:\".+?\")|(?:\'.+?\')|(?:\<.+?\>)|(?:\d+(?:\.\d*)?|(?:\.\d+)))'
 
-    for word in replace_values:
-        if word:
-            if word[0] == '"':
-                step = step.replace(word, '"input"', 1)
-            elif word[0] == "'":
-                step = step.replace(word, "'input'", 1)
-            elif word[0] == '<':
-                step = step.replace(word, '<input>', 1)
-            elif _is_int(word[0]) or word[0] == '.':
-                step = step.replace(word, "[number]", 1)
+    def _is_int(s):
+        try:
+            int(s)
+        except ValueError:
+            return False
+        return True
 
-    return step
+    for step in steps:
+        keyword = step[0]
+        body = step[1]
 
-def _get_steps_from_files(files=None):
-    if not files:
-        files = []
+        replace_values = re.findall(regex, body)
+        for word in replace_values:
+            if word:
+                if word[0] == '"':
+                    body = body.replace(word, '"input"', 1)
+                elif word[0] == "'":
+                    body = body.replace(word, "'input'", 1)
+                elif word[0] == '<':
+                    body = body.replace(word, '<input>', 1)
+                elif _is_int(word[0]) or word[0] == '.':
+                    body = body.replace(word, "[number]", 1)
+        formatted_steps.add((keyword, body))
 
-    with open(file_) as feature:
-        for line in feature.readlines():
-            # Separate keyword from line
-            line_split = line.split(maxsplit=1)
-
-            # Skip line if no step body is present
-            if len(line_split) < 2:
-                continue
-
-            first_word = line_split[0].lower()
-
-            elif first_word in main_words:
-                last_main_word = first_word.lower()
-            elif first_word in extra_words:
-                pass
-            else:
-                continue
-
-            # Remove keyword from line and format step
-            line = _format_step(line_split[1])
-            lines.add((last_main_word, line.strip() + '\n'))
+    return formatted_steps
 
 
-def run():
-    """ Main method of the module, iterates through directories provided
-        in the settings to store and format the Gherkin steps.
+def run(directories):
+    """ Gets feature files from provided directories, gets steps from files,
+        formats steps to avoid duplicates.
 
-    :rtype: list(tuple(str, str))
+    :param [str] directories: collection of directories
+    :rtype: set of (str, str)
     """
-    settings = sublime.load_settings('Gherkin Auto-Complete Plus.sublime-settings')
-    feature_file_directories = settings.get('feature_file_directories')
-
-    if not feature_file_directories:
-        sublime.error_message(feature_error)
-        return None
-
-    main_words = ['given', 'when', 'then']
-    extra_words = ['and', 'but']
-
-    lines = set()
-    last_main_word = ''
-
-    for path in feature_file_directories:
-        if not path.endswith('/'):
-            path += '/'
-        for file_ in glob.glob(path + '*.feature'):
-
-    return lines
+    files = _get_feature_files(directories)
+    steps = _get_steps(files)
+    formatted_steps = _format_steps(steps)
+    return formatted_steps
