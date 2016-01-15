@@ -1,12 +1,11 @@
-# Soon To Be Deprecated #
-#########################
-/FeatureTests
-steps.txt
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+.cache/
 
-# OS generated files #
-######################
+# OS generated files
 .DS_Store
 
-# Editor Files #
-################
-*.sublime-workspace
+# ctags
+tags

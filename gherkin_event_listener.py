@@ -8,6 +8,11 @@ keywords = ['given', 'when', 'then']
 completions = {}
 steps = []
 
+feature_error = ('Gherkin Auto-Complete Plus: \nPlease specify a path to the directory'
+                 ' containing your Feature Files. Go to \n\n"Preferences -> '
+                 'Package Settings -> Gherkin Auto-Complete Plus -> Settings - User"'
+                 '\n\n and create an entry for "feature_file_directories".')
+
 
 class GherkinEventListener(sublime_plugin.EventListener):
     """
@@ -20,6 +25,7 @@ class GherkinEventListener(sublime_plugin.EventListener):
     def on_modified(self, view):
         """ Triggers when a sublime.View is modified. If in Gherkin syntax,
             opens AutoComplete menu and fills with completions.
+            lool
 
         :param view: sublime.View object
         :type view: sublime.View
@@ -83,8 +89,15 @@ class GherkinEventListener(sublime_plugin.EventListener):
         """ Executes the 'run' method of the 'update_steps' module
             and stores the results in the 'steps' variable
         """
+        settings = sublime.load_settings('Gherkin Auto-Complete Plus.sublime-settings')
+        feature_directories = settings.get('feature_file_directories')
+
+        if not feature_directories:
+            sublime.error_message(feature_error)
+            return None
+
         steps.clear()
-        [steps.append(step) for step in update_steps.run()]
+        [steps.append(step) for step in update_steps.run(feature_directories)]
 
     def _is_gherkin_scope(self, view):
         """ Validates that user is in Gherkin Syntax
