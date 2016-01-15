@@ -1,9 +1,6 @@
 import glob
 import re
 
-main_words = ['given', 'when', 'then']
-extra_words = ['and', 'but']
-
 
 def _get_feature_files(directories):
     """ Gets all *.feature files under the provided directories
@@ -14,48 +11,59 @@ def _get_feature_files(directories):
     if directories is None:
         directories = []
 
-    files = set()
+    files = []
     for path in directories:
         if not path.endswith('/'):
             path += '/'
-        files.update(glob.glob(path + '*.feature'))
+        files.extend(glob.glob(path + '*.feature'))
     return files
 
 
 def _get_steps(files):
     """ Gets all Gherkin steps from provided files
 
-    :param [str] files: feature files
+    :param files: feature files
     :rtype: set of (str, str)
     """
     if files is None:
         files = []
 
-    last_main_word = ''
+    main_words = ['given', 'when', 'then']
+    extra_words = ['and', 'but']
     steps = set()
 
-    for file_ in files:
-        with open(file_) as feature:
-            for line in feature.readlines():
-                # Separate keyword from line
-                line_split = line.split(maxsplit=1)
+    for file in files:
+        close_file = False
+        if not hasattr(file, 'read'):
+            file = open(file)
+            close_file = True
 
-                # Skip line if no step body is present
-                if len(line_split) < 2:
-                    continue
+        last_main_word = ''
 
-                first_word = line_split[0].lower()
+        for line in file.readlines():
+            # Separate keyword from line
+            line_split = line.split(maxsplit=1)
 
-                if first_word in main_words:
-                    last_main_word = first_word.lower()
-                elif first_word in extra_words:
-                    pass
-                else:
-                    continue
+            # Skip line if no step body is present
+            if len(line_split) < 2:
+                continue
 
-                line = line_split[1].strip()
-                step = (last_main_word, line)
-                steps.add(step)
+            first_word = line_split[0].lower()
+
+            if first_word in main_words:
+                last_main_word = first_word.lower()
+            elif first_word in extra_words:
+                pass
+            else:
+                continue
+
+            line = line_split[1].strip()
+            step = (last_main_word, line)
+            steps.add(step)
+
+        if close_file:
+            file.close()
+
     return steps
 
 
@@ -111,7 +119,8 @@ def run(directories):
     :param [str] directories: collection of directories
     :rtype: set of (str, str)
     """
-    files = _get_feature_files(directories)
-    steps = _get_steps(files)
+    filenames = _get_feature_files(directories)
+    steps = _get_steps(filenames)
     formatted_steps = _format_steps(steps)
+
     return formatted_steps
