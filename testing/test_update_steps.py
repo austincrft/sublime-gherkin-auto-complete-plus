@@ -18,7 +18,7 @@ class TestUpdateSteps(unittest.TestCase):
         expected = []
         self.assertEqual(actual, expected)
 
-    def test_get_steps_valid_input(self):
+    def test_get_steps_one_file(self):
         sio = io.StringIO(
             """Feature: Coffee Testing
 
@@ -38,6 +38,34 @@ class TestUpdateSteps(unittest.TestCase):
             ('when', "I say 'Good Morning!'"),
             ('then', 'I should receive the <AMAZING> coffee'),
             ('then', 'I should receive 0.50 in change')
+        ])
+        self.assertEqual(actual, expected)
+
+    def test_get_steps_multiple_files(self):
+        sio1 = io.StringIO(
+            """Feature: Coffee Testing
+
+                Scenario: Buy first Coffee
+                    Given there is a coffee named "Sublime"
+                    When I give the cashier 2 dollars
+                    Then I should receive the <AMAZING> coffee"""
+        )
+        sio2 = io.StringIO(
+            """Feature: More Coffee Testing
+
+                Scenario: Buy first Coffee
+                    Given some different steps
+                    When I type more steps
+                    Then I get more steps"""
+        )
+        actual = us.get_steps([sio1, sio2])
+        expected = set([
+            ('given', 'there is a coffee named "Sublime"'),
+            ('when', 'I give the cashier 2 dollars'),
+            ('then', 'I should receive the <AMAZING> coffee'),
+            ('given', 'some different steps'),
+            ('when', 'I type more steps'),
+            ('then', 'I get more steps')
         ])
         self.assertEqual(actual, expected)
 
@@ -64,6 +92,23 @@ class TestUpdateSteps(unittest.TestCase):
         )
         actual = us.get_steps([sio])
         expected = set()
+        self.assertEqual(actual, expected)
+
+    def test_get_steps_syntax_error_in_file(self):
+        sio = io.StringIO(
+            """Feature: More Coffee Testing
+
+                Scenario: Buy first Coffee
+                    Given a valid step
+                    And
+                    When a step after an error
+            """
+        )
+        actual = us.get_steps([sio])
+        expected = set([
+            ('given', 'a valid step'),
+            ('when', 'a step after an error')
+        ])
         self.assertEqual(actual, expected)
 
     def test_format_steps_valid_input(self):
