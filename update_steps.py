@@ -2,7 +2,7 @@ import glob
 import re
 
 
-def _get_feature_files(directories):
+def get_feature_files(directories):
     """ Gets all *.feature files under the provided directories
 
     :param [str] directories: a list of directory names
@@ -19,7 +19,7 @@ def _get_feature_files(directories):
     return files
 
 
-def _get_steps(files):
+def get_steps(files):
     """ Gets all Gherkin steps from provided files
 
     :param files: feature files
@@ -67,7 +67,7 @@ def _get_steps(files):
     return steps
 
 
-def _format_steps(steps):
+def format_steps(steps):
     """ Formats steps in a uniform way to avoid duplicate steps in results
 
     :param steps: Gherkin steps paired with their keywords e.g. (keyword, step)
@@ -119,8 +119,8 @@ def run(directories):
     :param [str] directories: collection of directories
     :rtype: set of (str, str)
     """
-    filenames = _get_feature_files(directories)
-    steps = _get_steps(filenames)
-    formatted_steps = _format_steps(steps)
+    filenames = get_feature_files(directories)
+    steps = get_steps(filenames)
+    formatted_steps = format_steps(steps)
 
     return formatted_steps
