@@ -27,8 +27,7 @@ class GherkinEventListener(sublime_plugin.EventListener):
             opens AutoComplete menu and fills with completions.
             lool
 
-        :param view: sublime.View object
-        :type view: sublime.View
+        :param sublime.View view: the sublime view
         """
         view_sel = view.sel()
         if not view_sel:
@@ -60,12 +59,9 @@ class GherkinEventListener(sublime_plugin.EventListener):
         Takes the completions that were set in the 'fill_completions' method
         and returns them to the AutoComplete list.
 
-        :param view: `sublime.View` object
-        :type view: sublime.View
-        :param prefix: last word to the left of the cursor
-        :type prefix: str
-        :param locations: offset from beginning of line
-        :type locations: list(int)
+        :param sublime.View view: the sublime view
+        :param str prefix: last word to the left of the cursor
+        :param [int] locations: offset from beginning of line
 
         ^^ None of which are used, but have some documentation anyway.
         """
@@ -76,11 +72,9 @@ class GherkinEventListener(sublime_plugin.EventListener):
 
     def on_post_save_async(self, view):
         """ Sublime Text 'On File Save' event handler
+            Updates the step catolog after file save in Gherkin syntax
 
-        Updates the step catolog after file save in Gherkin syntax
-
-        :param view: `sublime.View` object
-        :type view: sublime.View
+        :param sublime.View view: the sublime view
         """
         if self._is_gherkin_scope(view):
             self._update_steps()
@@ -102,10 +96,9 @@ class GherkinEventListener(sublime_plugin.EventListener):
     def _is_gherkin_scope(self, view):
         """ Validates that user is in Gherkin Syntax
 
-        :param view: `sublime.View` object
-        :type view: sublime.View
+        :param sublime.View view: the sublime view
 
-        :return: bool
+        :rtype: bool
         """
         location = view.sel()[0].end()
         return view.match_selector(location, "text.gherkin.feature - comment")
@@ -113,12 +106,10 @@ class GherkinEventListener(sublime_plugin.EventListener):
     def _step_matches_line(self, step_words, line_words):
         """ Validates that words in step match words in line
 
-        :param step_words: words in step definition
-        :type step_words: list(str)
-        :param line_words: words in current line
-        :type line_words: list(str)
+        :param [str] step_words: words in step definition
+        :param [str] line_words: words in current line
 
-        :return: bool
+        :rtype: bool
         """
         # Skip first word in line because it is a keyword
         line_text = ' '.join(line_words[1:])
@@ -136,12 +127,10 @@ class GherkinEventListener(sublime_plugin.EventListener):
     def _format_step(self, step, line_words=[]):
         """ Returns step formatted in snippet notation
 
-        :param step: step definition
-        :type step: str
-        :param line_words: words in step definition
-        :type line_words: list(str)
+        :param str step: step definition
+        :param [str] line_words: words in step definition
 
-        :return: str
+        :rtype: str
         """
         # Skip first word in line because it is a keyword
         # Skip last word in line so it'll be included in output
@@ -171,8 +160,7 @@ class GherkinEventListener(sublime_plugin.EventListener):
     def _show_auto_complete(self, view):
         """ Opens AutoComplete manually
 
-        :param view: the view containing the cursor
-        :type view: sublime.View
+        :param sublime.View view: the sublime view
         """
         def _show_auto_complete():
             view.run_command('auto_complete', {
@@ -187,10 +175,8 @@ class GherkinEventListener(sublime_plugin.EventListener):
     def _fill_completions(self, view, location):
         """ Prepares completions for auto-complete list
 
-        :param view: `sublime.View` object
-        :type view: sublime.View
-        :param location: position of cursor in line
-        :type locations: int
+        :param sublime.View view: the sublime view
+        :param int location: position of cursor in line
         """
         last_keyword = ''
         current_region = view.line(location)
