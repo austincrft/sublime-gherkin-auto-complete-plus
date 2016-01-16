@@ -1,7 +1,7 @@
 # Gherkin Auto-Complete Plus
 This is a [Sublime Text](http://www.sublimetext.com/) auto-complete plugin for use with [Cucumber](https://cucumber.io/)'s [Gherkin](https://cucumber.io/docs/reference#gherkin) language. This plugin will catalog Gherkin step definitions from the `*.feature` files of the selected directories and provide auto-complete suggestions based on the catalogued steps.
 
-![example](/images/sublime_gherkin_auto_complete_plus.gif)
+![example](/img/sublime_gherkin_auto_complete_plus.gif)
 
 *(apparently math isn't my forte)* :wink:
 
