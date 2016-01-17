@@ -1,7 +1,22 @@
+import functools
 import glob
+import logging
 import re
 
 
+def log_func(func):
+    @functools.wraps(log_func)
+    def wrap(*args, **kwargs):
+        logger = logging.getLogger(func.__module__)
+        logger.info('Entering {}'.format(func.__name__))
+        f_result = func(*args, **kwargs)
+        logger.debug('{} result: {}'.format(func.__name__, f_result))
+        logger.info('Exiting {}'.format(func.__name__))
+        return f_result
+    return wrap
+
+
+@log_func
 def get_feature_files(directories):
     """ Gets all *.feature files under the provided directories
 
@@ -19,6 +34,7 @@ def get_feature_files(directories):
     return files
 
 
+@log_func
 def get_steps(files):
     """ Gets all Gherkin steps from provided files
 
@@ -112,6 +128,7 @@ def format_steps(steps):
     return formatted_steps
 
 
+@log_func
 def run(directories):
     """ Gets feature files from provided directories, gets steps from files,
         formats steps to avoid duplicates.
@@ -122,5 +139,4 @@ def run(directories):
     filenames = get_feature_files(directories)
     steps = get_steps(filenames)
     formatted_steps = format_steps(steps)
-
     return formatted_steps

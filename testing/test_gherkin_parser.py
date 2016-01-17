@@ -1,4 +1,4 @@
-import update_steps as us
+import gherkin_parser as gp
 import unittest
 
 import io
@@ -6,15 +6,16 @@ import os
 
 
 class TestUpdateSteps(unittest.TestCase):
+
     def test_get_feature_files_valid_folder(self):
         directory = os.getcwd() + '/testing/feature-files'
-        actual = us.get_feature_files([directory])
+        actual = gp.get_feature_files([directory])
         expected = [os.path.join(directory, f) for f in os.listdir(directory)]
         self.assertEqual(actual, expected)
 
     def test_get_feature_files_invalid_folder(self):
         directory = os.getcwd() + '/a-fake-folder-name/'
-        actual = us.get_feature_files([directory])
+        actual = gp.get_feature_files([directory])
         expected = []
         self.assertEqual(actual, expected)
 
@@ -30,7 +31,7 @@ class TestUpdateSteps(unittest.TestCase):
                     Then I should receive the <AMAZING> coffee
                     And I should receive 0.50 in change"""
         )
-        actual = us.get_steps([sio])
+        actual = gp.get_steps([sio])
         expected = set([
             ('given', 'there is a coffee named "Sublime"'),
             ('given', 'the coffee costs 1.50 dollars'),
@@ -58,7 +59,7 @@ class TestUpdateSteps(unittest.TestCase):
                     When I type more steps
                     Then I get more steps"""
         )
-        actual = us.get_steps([sio1, sio2])
+        actual = gp.get_steps([sio1, sio2])
         expected = set([
             ('given', 'there is a coffee named "Sublime"'),
             ('when', 'I give the cashier 2 dollars'),
@@ -78,7 +79,7 @@ class TestUpdateSteps(unittest.TestCase):
                     | value1  | value2  | value3  |
             """
         )
-        actual = us.get_steps([sio])
+        actual = gp.get_steps([sio])
         expected = set()
         self.assertEqual(actual, expected)
 
@@ -90,7 +91,7 @@ class TestUpdateSteps(unittest.TestCase):
                 # Only a comment supplied
             """
         )
-        actual = us.get_steps([sio])
+        actual = gp.get_steps([sio])
         expected = set()
         self.assertEqual(actual, expected)
 
@@ -104,7 +105,7 @@ class TestUpdateSteps(unittest.TestCase):
                     When a step after an error
             """
         )
-        actual = us.get_steps([sio])
+        actual = gp.get_steps([sio])
         expected = set([
             ('given', 'a valid step'),
             ('when', 'a step after an error')
@@ -120,7 +121,7 @@ class TestUpdateSteps(unittest.TestCase):
             ('then', 'I should receive the <AMAZING> coffee'),
             ('then', 'I should receive 0.50 in change')
         ])
-        actual = us.format_steps(unformatted_steps)
+        actual = gp.format_steps(unformatted_steps)
         expected = set([
             ('given', 'there is a coffee named "input"'),
             ('given', 'the coffee costs [number] dollars'),
