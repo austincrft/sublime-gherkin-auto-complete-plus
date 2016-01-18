@@ -1,5 +1,5 @@
 # Gherkin Auto-Complete Plus
-![travis-ci](https://travis-ci.org/austincrft/sublime-gherkin-auto-complete-plus.svg?branch=master)
+[![Build Status](https://travis-ci.org/austincrft/sublime-gherkin-auto-complete-plus.svg?branch=master)](https://travis-ci.org/austincrft/sublime-gherkin-auto-complete-plus)
 
 This is a [Sublime Text](http://www.sublimetext.com/) auto-complete plugin for use with [Cucumber](https://cucumber.io/)'s [Gherkin](https://cucumber.io/docs/reference#gherkin) language. This plugin will catalog Gherkin step definitions from the `*.feature` files of the selected directories and provide auto-complete suggestions based on the catalogued steps.
 
