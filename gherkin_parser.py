@@ -9,7 +9,10 @@ def log_func(func):
     def wrap(*args, **kwargs):
         logger = logging.getLogger(func.__module__)
         logger.info('Entering {}'.format(func.__name__))
-        f_result = func(*args, **kwargs)
+        try:
+            f_result = func(*args, **kwargs)
+        except Exception as e:
+            logger.error(e)
         logger.debug('{} result: {}'.format(func.__name__, f_result))
         logger.info('Exiting {}'.format(func.__name__))
         return f_result
