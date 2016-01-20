@@ -33,7 +33,7 @@ class GherkinEventListener(sublime_plugin.EventListener):
         if not view_sel:
             return
 
-        if not self._is_gherkin_scope(view):
+        if not self._is_feature_file(view):
             return
 
         if self.first_modify:
@@ -76,7 +76,7 @@ class GherkinEventListener(sublime_plugin.EventListener):
 
         :param sublime.View view: the sublime view
         """
-        if self._is_gherkin_scope(view):
+        if self._is_feature_file(view):
             self._update_steps()
 
     def _update_steps(self):
@@ -93,15 +93,15 @@ class GherkinEventListener(sublime_plugin.EventListener):
         steps.clear()
         [steps.append(step) for step in update_steps.run(feature_directories)]
 
-    def _is_gherkin_scope(self, view):
-        """ Validates that user is in Gherkin Syntax
+    def _is_feature_file(self, view):
+        """ Validates that user is in a feature file
 
         :param sublime.View view: the sublime view
-
         :rtype: bool
         """
-        location = view.sel()[0].end()
-        return view.match_selector(location, "text.gherkin.feature - comment")
+        file_name = view.file_name()
+
+        return file_name and file_name.endswith('.feature')
 
     def _step_matches_line(self, step_words, line_words):
         """ Validates that words in step match words in line
