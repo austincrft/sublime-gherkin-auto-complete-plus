@@ -101,10 +101,7 @@ class GherkinEventListener(sublime_plugin.EventListener):
         """
         file_name = view.file_name()
 
-        if (file_name is None):
-            return False
-        else
-            return file_name.find(".feature", -8) > -1
+        return file_name and file_name.endswith('.feature')
 
     def _step_matches_line(self, step_words, line_words):
         """ Validates that words in step match words in line
