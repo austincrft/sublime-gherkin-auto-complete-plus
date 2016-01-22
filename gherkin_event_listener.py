@@ -1,17 +1,15 @@
 import sublime
 import sublime_plugin
 import re
-from . import update_steps
+import logging
+
+from .settings import get_logging_level, get_feature_directories
+from .gherkin_parser import GherkinParser
 
 
 keywords = ['given', 'when', 'then']
 completions = {}
 steps = []
-
-feature_error = ('Gherkin Auto-Complete Plus: \nPlease specify a path to the directory'
-                 ' containing your Feature Files. Go to \n\n"Preferences -> '
-                 'Package Settings -> Gherkin Auto-Complete Plus -> Settings - User"'
-                 '\n\n and create an entry for "feature_file_directories".')
 
 
 class GherkinEventListener(sublime_plugin.EventListener):
@@ -21,6 +19,8 @@ class GherkinEventListener(sublime_plugin.EventListener):
 
     def __init__(self):
         self.first_modify = True
+        logging.basicConfig(level=get_logging_level())
+        print('hey, you reached me')
 
     def on_modified(self, view):
         """ Triggers when a sublime.View is modified. If in Gherkin syntax,
@@ -83,15 +83,18 @@ class GherkinEventListener(sublime_plugin.EventListener):
         """ Executes the 'run' method of the 'update_steps' module
             and stores the results in the 'steps' variable
         """
-        settings = sublime.load_settings('Gherkin Auto-Complete Plus.sublime-settings')
-        feature_directories = settings.get('feature_file_directories')
+        feature_directories = get_feature_directories()
 
         if not feature_directories:
-            sublime.error_message(feature_error)
-            return None
+            return
 
         steps.clear()
-        [steps.append(step) for step in update_steps.run(feature_directories)]
+
+        level = get_logging_level()
+        gp = GherkinParser(level)
+
+        new_steps = gp.run(feature_directories)
+        steps.extend(new_steps)
 
     def _is_feature_file(self, view):
         """ Validates that user is in a feature file
@@ -100,7 +103,6 @@ class GherkinEventListener(sublime_plugin.EventListener):
         :rtype: bool
         """
         file_name = view.file_name()
-
         return file_name and file_name.endswith('.feature')
 
     def _step_matches_line(self, step_words, line_words):
@@ -202,8 +204,9 @@ class GherkinEventListener(sublime_plugin.EventListener):
                     break
 
         if not last_keyword:
-            print("Gherkin Auto-Complete Plus: Could not find 'Given', 'When', "
-                  "or 'Then' in text.")
+            logger = logging.getLogger(__name__)
+            logger.setLevel(get_logging_level())
+            logger.warning("Gherkin Auto-Complete Plus: Could not find 'Given', 'When', or 'Then' in text.")
             return
 
         for step_type, step in steps:
