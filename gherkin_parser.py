@@ -4,142 +4,148 @@ import logging
 import re
 
 
-def log_func(func):
-    @functools.wraps(log_func)
-    def wrap(*args, **kwargs):
-        logger = logging.getLogger(func.__module__)
-        logger.info('Entering {}'.format(func.__name__))
-        try:
+def log_func(logger):
+    """ Logs function info with target logger
+
+    :param logging.Logger logger: target logger
+    """
+    def inner_log_func(func):
+        @functools.wraps(inner_log_func)
+        def wrap(*args, **kwargs):
+            logger = logging.getLogger(func.__module__)
+            logger.info('Entering {}'.format(func.__name__))
+
             f_result = func(*args, **kwargs)
-        except Exception as e:
-            logger.error(e)
-        logger.debug('{} result: {}'.format(func.__name__, f_result))
-        logger.info('Exiting {}'.format(func.__name__))
-        return f_result
-    return wrap
+            logger.debug('{} result: {}'.format(func.__name__, f_result))
+
+            logger.info('Exiting {}'.format(func.__name__))
+            return f_result
+        return wrap
+    return inner_log_func
 
 
-@log_func
-def get_feature_files(directories):
-    """ Gets all *.feature files under the provided directories
+class GherkinParser:
+    def __init__(self, logger):
+        # Decorate functions at initialize to pass logger
+        self.get_feature_files = log_func(logger)(self.get_feature_files)
+        self.get_steps = log_func(logger)(self.get_steps)
+        self.format_steps = log_func(logger)(self.format_steps)
 
-    :param [str] directories: a list of directory names
-    :rtype: set of (str, str)
-    """
-    if directories is None:
-        directories = []
+    def get_feature_files(self, directories):
+        """ Gets all *.feature files under the provided directories
 
-    files = []
-    for path in directories:
-        if not path.endswith('/'):
-            path += '/'
-        files.extend(glob.glob(path + '*.feature'))
-    return files
+        :param [str] directories: a list of directory names
+        :rtype: set of (str, str)
+        """
+        if directories is None:
+            directories = []
 
-
-@log_func
-def get_steps(files):
-    """ Gets all Gherkin steps from provided files
-
-    :param files: feature files
-    :rtype: set of (str, str)
-    """
-    if files is None:
         files = []
+        for path in directories:
+            if not path.endswith('/'):
+                path += '/'
+            files.extend(glob.glob(path + '*.feature'))
+        return files
 
-    main_words = ['given', 'when', 'then']
-    extra_words = ['and', 'but']
-    steps = set()
+    def get_steps(self, files):
+        """ Gets all Gherkin steps from provided files
 
-    for file in files:
-        close_file = False
-        if not hasattr(file, 'read'):
-            file = open(file)
-            close_file = True
+        :param files: feature files
+        :rtype: set of (str, str)
+        """
+        if files is None:
+            files = []
 
-        last_main_word = ''
+        main_words = ['given', 'when', 'then']
+        extra_words = ['and', 'but']
+        steps = set()
 
-        for line in file.readlines():
-            # Separate keyword from line
-            line_split = line.split(maxsplit=1)
+        for file in files:
+            close_file = False
+            if not hasattr(file, 'read'):
+                file = open(file)
+                close_file = True
 
-            # Skip line if no step body is present
-            if len(line_split) < 2:
-                continue
+            last_main_word = ''
 
-            first_word = line_split[0].lower()
+            for line in file.readlines():
+                # Separate keyword from line
+                line_split = line.split(maxsplit=1)
 
-            if first_word in main_words:
-                last_main_word = first_word.lower()
-            elif first_word in extra_words:
-                pass
-            else:
-                continue
+                # Skip line if no step body is present
+                if len(line_split) < 2:
+                    continue
 
-            line = line_split[1].strip()
-            step = (last_main_word, line)
-            steps.add(step)
+                first_word = line_split[0].lower()
 
-        if close_file:
-            file.close()
+                if first_word in main_words:
+                    last_main_word = first_word.lower()
+                elif first_word in extra_words:
+                    pass
+                else:
+                    continue
 
-    return steps
+                line = line_split[1].strip()
+                step = (last_main_word, line)
+                steps.add(step)
 
+            if close_file:
+                file.close()
 
-def format_steps(steps):
-    """ Formats steps in a uniform way to avoid duplicate steps in results
+        return steps
 
-    :param steps: Gherkin steps paired with their keywords e.g. (keyword, step)
-    :type steps: set of (str, str)
-    :rtype: set of (str, str)
-    """
-    if steps is None:
-        steps = []
+    def format_steps(self, steps):
+        """ Formats steps in a uniform way to avoid duplicate steps in results
 
-    formatted_steps = set()
+        :param steps: Gherkin steps paired with their keywords e.g. (keyword, step)
+        :type steps: set of (str, str)
+        :rtype: set of (str, str)
+        """
+        if steps is None:
+            steps = []
 
-    # SWEET MOTHER OF REGEX!
-    # Get values in between single- and double-quotes,
-    # values in between greater- and less-than signs,
-    # and numbers in 'integer' and 'decimal' format
-    regex = r'((?:\".+?\")|(?:\'.+?\')|(?:\<.+?\>)|(?:\d+(?:\.\d*)?|(?:\.\d+)))'
+        formatted_steps = set()
 
-    def _is_int(s):
-        try:
-            int(s)
-        except ValueError:
-            return False
-        return True
+        # SWEET MOTHER OF REGEX!
+        # Get values in between single- and double-quotes,
+        # values in between greater- and less-than signs,
+        # and numbers in 'integer' and 'decimal' format
+        regex = r'((?:\".+?\")|(?:\'.+?\')|(?:\<.+?\>)|(?:\d+(?:\.\d*)?|(?:\.\d+)))'
 
-    for step in steps:
-        keyword = step[0]
-        body = step[1]
+        def _is_int(s):
+            try:
+                int(s)
+            except ValueError:
+                return False
+            return True
 
-        replace_values = re.findall(regex, body)
-        for word in replace_values:
-            if word:
-                if word[0] == '"':
-                    body = body.replace(word, '"input"', 1)
-                elif word[0] == "'":
-                    body = body.replace(word, "'input'", 1)
-                elif word[0] == '<':
-                    body = body.replace(word, '<input>', 1)
-                elif _is_int(word[0]) or word[0] == '.':
-                    body = body.replace(word, "[number]", 1)
-        formatted_steps.add((keyword, body))
+        for step in steps:
+            keyword = step[0]
+            body = step[1]
 
-    return formatted_steps
+            replace_values = re.findall(regex, body)
+            for word in replace_values:
+                if word:
+                    if word[0] == '"':
+                        body = body.replace(word, '"input"', 1)
+                    elif word[0] == "'":
+                        body = body.replace(word, "'input'", 1)
+                    elif word[0] == '<':
+                        body = body.replace(word, '<input>', 1)
+                    elif _is_int(word[0]) or word[0] == '.':
+                        body = body.replace(word, "[number]", 1)
+            formatted_steps.add((keyword, body))
 
+        return formatted_steps
 
-@log_func
-def run(directories):
-    """ Gets feature files from provided directories, gets steps from files,
-        formats steps to avoid duplicates.
+    def run(self, directories):
+        """ Gets feature files from provided directories, gets steps from files,
+            formats steps to avoid duplicates.
 
-    :param [str] directories: collection of directories
-    :rtype: set of (str, str)
-    """
-    filenames = get_feature_files(directories)
-    steps = get_steps(filenames)
-    formatted_steps = format_steps(steps)
-    return formatted_steps
+        :param [str] directories: collection of directories
+        :rtype: set of (str, str)
+        """
+        filenames = get_feature_files(directories)
+        steps = get_steps(filenames)
+        formatted_steps = format_steps(steps)
+        return formatted_steps
