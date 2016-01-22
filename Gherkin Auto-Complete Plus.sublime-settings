@@ -4,5 +4,14 @@
     [
       // Uncomment this and alter the path
       // "path/to/featurefiles/directory",
-    ]
+    ],
+
+    // Logging for execution information
+    // Valid options:
+    // DEBUG - Detailed information for debugging
+    // INFO - Confirmation that things are working as expected
+    // WARNING - An indication something might fail in the future
+    // ERROR - An error occurred, likely a recoverable one
+    // CRITICAL - A non-recoverable error -- execution will stop
+    "logging_level": "error"
 }

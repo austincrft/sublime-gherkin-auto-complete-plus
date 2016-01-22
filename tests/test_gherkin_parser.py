@@ -8,10 +8,10 @@ import logging
 
 class TestUpdateSteps(unittest.TestCase):
     def setUp(self):
-        self.gp = GherkinParser(logging.getLogger(__name__))
+        self.gp = GherkinParser(logging.ERROR)
 
     def test_get_feature_files_valid_folder(self):
-        directory = os.getcwd() + '/testing/feature-files'
+        directory = os.getcwd() + '/tests/feature-files'
         actual = self.gp.get_feature_files([directory])
         expected = [os.path.join(directory, f) for f in os.listdir(directory)]
         self.assertEqual(actual, expected)

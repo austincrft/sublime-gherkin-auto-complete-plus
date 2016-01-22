@@ -4,32 +4,34 @@ import logging
 import re
 
 
-def log_func(logger):
-    """ Logs function info with target logger
-
-    :param logging.Logger logger: target logger
-    """
+def log_func(logging_level):
+    """ Logs function information -- sets logging level to provided level """
     def inner_log_func(func):
         @functools.wraps(inner_log_func)
         def wrap(*args, **kwargs):
-            logger = logging.getLogger(func.__module__)
-            logger.info('Entering {}'.format(func.__name__))
+            logger = logging.getLogger(__name__)
+            logger.setLevel(logging_level)
+            logger.info('Entering function "{}"'.format(func.__name__))
 
-            f_result = func(*args, **kwargs)
-            logger.debug('{} result: {}'.format(func.__name__, f_result))
+            f_result = None
+            try:
+                f_result = func(*args, **kwargs)
+                logger.debug('{} result: {}'.format(func.__name__, f_result))
+            except Exception as e:
+                logger.error(e)
 
-            logger.info('Exiting {}'.format(func.__name__))
+            logger.info('Exiting "{}"'.format(func.__name__))
             return f_result
         return wrap
     return inner_log_func
 
 
 class GherkinParser:
-    def __init__(self, logger):
-        # Decorate functions at initialize to pass logger
-        self.get_feature_files = log_func(logger)(self.get_feature_files)
-        self.get_steps = log_func(logger)(self.get_steps)
-        self.format_steps = log_func(logger)(self.format_steps)
+    def __init__(self, logging_level):
+        # Decorate functions at initialize to pass logging_level
+        self.get_feature_files = log_func(logging_level)(self.get_feature_files)
+        self.get_steps = log_func(logging_level)(self.get_steps)
+        self.format_steps = log_func(logging_level)(self.format_steps)
 
     def get_feature_files(self, directories):
         """ Gets all *.feature files under the provided directories
@@ -145,7 +147,7 @@ class GherkinParser:
         :param [str] directories: collection of directories
         :rtype: set of (str, str)
         """
-        filenames = get_feature_files(directories)
-        steps = get_steps(filenames)
-        formatted_steps = format_steps(steps)
+        filenames = self.get_feature_files(directories)
+        steps = self.get_steps(filenames)
+        formatted_steps = self.format_steps(steps)
         return formatted_steps
