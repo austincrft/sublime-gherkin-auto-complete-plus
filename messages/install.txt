@@ -1,4 +1,4 @@
 **Thank you for installing Gherkin Auto-Complete Plus**
 
-For he latest config/setup information, view the README at
+For the latest config/setup information, view the README at
 https://github.com/austincrft/sublime-gherkin-auto-complete-plus
