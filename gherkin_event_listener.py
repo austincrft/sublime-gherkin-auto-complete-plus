@@ -20,7 +20,6 @@ class GherkinEventListener(sublime_plugin.EventListener):
     def __init__(self):
         self.first_modify = True
         logging.basicConfig(level=get_logging_level())
-        print('hey, you reached me')
 
     def on_modified(self, view):
         """ Triggers when a sublime.View is modified. If in Gherkin syntax,

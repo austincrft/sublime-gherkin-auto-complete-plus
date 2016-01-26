@@ -6,7 +6,8 @@
       // "path/to/featurefiles/directory",
     ],
 
-    // Logging for execution information
+    // Logging for execution information -- this will output to the Sublime Text Console
+    // You can view the console by going to the toolbar and selecting `View -> Show Console`
     // Valid options:
     // DEBUG - Detailed information for debugging
     // INFO - Confirmation that things are working as expected
