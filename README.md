@@ -64,7 +64,7 @@ Absolutely, yes. It's intended to be tongue-in-cheek, but also I couldn't think 
 #### Mac OSX
     cd ~/Library/Application\ Support/Sublime\ Text\ 3/Packages
     git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git "Gherkin Auto-Complete Plus"
-#### Linuxg
+#### Linux
     cd ~/.config/sublime-text-3/Installed\ Packages
     git clone git://https://github.com/austincrft/sublime-gherkin-auto-complete-plus.git "Gherkin Auto-Complete Plus"
 #### Windows
