@@ -1,5 +1,6 @@
-import sublime
 import logging
+
+import sublime
 
 feature_error = ('Gherkin Auto-Complete Plus: \nPlease specify a path to the directory'
                  ' containing your Feature Files. Go to \n\n"Preferences -> '

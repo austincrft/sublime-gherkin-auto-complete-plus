@@ -1,9 +1,9 @@
-from gherkin_parser import GherkinParser
+import io
+import logging
+import os
 import unittest
 
-import io
-import os
-import logging
+from gherkin_parser import GherkinParser
 
 
 class TestUpdateSteps(unittest.TestCase):

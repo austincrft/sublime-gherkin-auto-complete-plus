@@ -1,15 +1,17 @@
+import logging
+import re
+
 import sublime
 import sublime_plugin
-import re
-import logging
 
-from .settings import get_logging_level, get_feature_directories
 from .gherkin_parser import GherkinParser
-
+from .log_utilities import log_func
+from .settings import get_feature_directories, get_logging_level
 
 keywords = ['given', 'when', 'then']
 completions = {}
 steps = []
+logging_level = get_logging_level()
 
 
 class GherkinEventListener(sublime_plugin.EventListener):
@@ -19,7 +21,7 @@ class GherkinEventListener(sublime_plugin.EventListener):
 
     def __init__(self):
         self.first_modify = True
-        logging.basicConfig(level=get_logging_level())
+        logging.basicConfig(level=logging_level)
 
     def on_modified(self, view):
         """ Triggers when a sublime.View is modified. If in Gherkin syntax,
@@ -89,8 +91,7 @@ class GherkinEventListener(sublime_plugin.EventListener):
 
         steps.clear()
 
-        level = get_logging_level()
-        gp = GherkinParser(level)
+        gp = GherkinParser(logging_level)
 
         new_steps = gp.run(feature_directories)
         steps.extend(new_steps)
@@ -204,7 +205,7 @@ class GherkinEventListener(sublime_plugin.EventListener):
 
         if not last_keyword:
             logger = logging.getLogger(__name__)
-            logger.setLevel(get_logging_level())
+            logger.setLevel(logging_level)
             logger.warning("Gherkin Auto-Complete Plus: Could not find 'Given', 'When', or 'Then' in text.")
             return
 
