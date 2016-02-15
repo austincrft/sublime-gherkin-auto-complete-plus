@@ -21,7 +21,7 @@ class ListGherkinStepsCommand(sublime_plugin.WindowCommand):
     @log_func(logging_level)
     def get_steps_dict(self, catalogued_steps):
         steps = {}
-        for index, step in enumerate(catalogued_steps):
+        for index, step in enumerate(sorted(catalogued_steps)):
             formatted_step = step[0].capitalize() + ' ' + step[1]
             steps[index] = formatted_step
         return steps
