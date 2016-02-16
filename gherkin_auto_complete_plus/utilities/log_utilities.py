@@ -2,7 +2,7 @@ import functools
 import logging
 
 
-def log_func(logging_level):
+def log_function(logging_level):
     """ Logs function information -- sets logging level to provided level """
     def inner_log_func(func):
         @functools.wraps(inner_log_func)
@@ -19,3 +19,9 @@ def log_func(logging_level):
             return f_result
         return wrap
     return inner_log_func
+
+
+def get_logger(module_name, logging_level):
+    logger = logging.getLogger(module_name)
+    logger.setLevel(logging_level)
+    return logger

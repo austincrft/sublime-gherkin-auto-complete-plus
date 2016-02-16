@@ -3,7 +3,7 @@ import logging
 import os
 import unittest
 
-from gherkin_parser import GherkinParser
+from gherkin_auto_complete_plus.utilities.gherkin_parser import GherkinParser
 
 
 class TestUpdateSteps(unittest.TestCase):
