@@ -9,28 +9,32 @@ _logger = log_utilities.get_logger(__name__, _logging_level)
 
 
 class ListGherkinStepsCommand(sublime_plugin.WindowCommand):
-    steps_dict = {}
+    steps = []
 
     @log_utilities.log_function(_logging_level)
     def run(self):
-        self.steps_dict = self.get_steps_dict(catalogued_steps)
-        self.show_quick_panel(sorted(self.steps_dict.values()))
+        """ Method that is executed when the command is called """
+        self.steps = self.get_steps(catalogued_steps)
+        self.show_quick_panel(self.steps)
 
     @log_utilities.log_function(_logging_level)
-    def get_steps_dict(self, catalogued_steps):
-        steps = {}
-        for index, step in enumerate(sorted(catalogued_steps)):
+    def get_steps(self, catalogued_steps):
+        """ Formats steps and sorts them alphabetically """
+        steps = []
+        for step in sorted(catalogued_steps):
             formatted_step = step[0].capitalize() + ' ' + step[1]
-            steps[index] = formatted_step
+            steps.append(formatted_step)
         return steps
 
     @log_utilities.log_function(_logging_level)
     def on_done(self, index):
+        """ Method executed when a quick-panel item is selected """
+        _logger.debug('index: {}'.format(index))
         if index == -1:
-            _logger.debug('index -1 (nothing selected from quick panel)')
+            _logger.debug('Nothing selected from quick panel')
             return
 
-        target_step = self.steps_dict[index]
+        target_step = self.steps[index]
         _logger.debug('target step: {}'.format(target_step))
 
         mapping = {"characters": target_step}
@@ -39,4 +43,7 @@ class ListGherkinStepsCommand(sublime_plugin.WindowCommand):
 
     @log_utilities.log_function(_logging_level)
     def show_quick_panel(self, steps):
+        """ Displays quick-panel with the given steps
+        :param [str] steps: List of steps to be displayed
+        """
         self.window.show_quick_panel(steps, self.on_done)
