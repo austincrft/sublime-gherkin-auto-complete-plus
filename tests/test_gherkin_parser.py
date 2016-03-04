@@ -1,14 +1,14 @@
-from gherkin_parser import GherkinParser
+import io
+import logging
+import os
 import unittest
 
-import io
-import os
-import logging
+from gherkin_auto_complete_plus.utilities.gherkin_parser import GherkinParser
 
 
 class TestUpdateSteps(unittest.TestCase):
     def setUp(self):
-        self.gp = GherkinParser(logging.ERROR)
+        self.gp = GherkinParser()
 
     def test_get_feature_files_valid_folder(self):
         directory = os.getcwd() + '/tests/feature-files'
