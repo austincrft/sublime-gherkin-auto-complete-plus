@@ -7,7 +7,7 @@ from .log_utilities import log_function
 
 class GherkinParser:
     def __init__(self, logging_level=logging.ERROR):
-        # Decorate functions at initialize to pass logging_level
+        """ Decorate functions at initialize to pass logging_level """
         self.get_feature_files = log_function(logging_level)(self.get_feature_files)
         self.get_steps = log_function(logging_level)(self.get_steps)
         self.format_steps = log_function(logging_level)(self.format_steps)

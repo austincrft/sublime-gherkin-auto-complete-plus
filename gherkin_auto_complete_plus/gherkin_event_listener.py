@@ -11,9 +11,6 @@ keywords = ['given', 'when', 'then']
 completions = {}
 steps = []
 
-_logging_level = settings.get_logging_level()
-_logger = settings.get_logger(__name__, _logging_level)
-
 
 class GherkinEventListener(sublime_plugin.EventListener):
     """
@@ -22,11 +19,10 @@ class GherkinEventListener(sublime_plugin.EventListener):
 
     def __init__(self):
         self.first_modify = True
-        logging.basicConfig(level=_logging_level)
 
     def on_modified(self, view):
         """ Triggers when a sublime.View is modified. If in Gherkin syntax,
-            opens AutoComplete menu and fills with completions.
+            opens Auto-Complete menu and fills with completions.
             lool
 
         :param sublime.View view: the sublime view
@@ -39,6 +35,13 @@ class GherkinEventListener(sublime_plugin.EventListener):
             return
 
         if self.first_modify:
+            # Set up logging -- must be done here because setting file isn't
+            # properly loaded at __init__ time
+            self._logging_level = settings.get_logging_level()
+            logging.basicConfig(level=self._logging_level)
+            self._logger = log_utilities.get_logger(__name__, self._logging_level)
+
+            # Update steps
             self._update_steps()
             self.first_modify = False
 
@@ -56,10 +59,10 @@ class GherkinEventListener(sublime_plugin.EventListener):
         self._fill_completions(view, pos)
 
     def on_query_completions(self, view, prefix, locations):
-        """ Sublime Text AutoComplete event handler
+        """ Sublime Text Auto-Complete event handler
 
         Takes the completions that were set in the 'fill_completions' method
-        and returns them to the AutoComplete list.
+        and returns them to the Auto-Complete list.
 
         :param sublime.View view: the sublime view
         :param str prefix: last word to the left of the cursor
@@ -92,7 +95,7 @@ class GherkinEventListener(sublime_plugin.EventListener):
 
         steps.clear()
 
-        parser = gp.GherkinParser(_logging_level)
+        parser = gp.GherkinParser(self._logging_level)
 
         new_steps = parser.run(feature_directories)
         steps.extend(new_steps)
@@ -161,7 +164,7 @@ class GherkinEventListener(sublime_plugin.EventListener):
         return step.strip()
 
     def _show_auto_complete(self, view):
-        """ Opens AutoComplete manually
+        """ Opens Auto-Complete manually
 
         :param sublime.View view: the sublime view
         """
@@ -205,7 +208,7 @@ class GherkinEventListener(sublime_plugin.EventListener):
                     break
 
         if not last_keyword:
-            _logger.warning("Gherkin Auto-Complete Plus: Could not find 'Given', 'When', or 'Then' in text.")
+            self._logger.warning("Could not find 'Given', 'When', or 'Then' in text.")
             return
 
         for step_type, step in steps:
