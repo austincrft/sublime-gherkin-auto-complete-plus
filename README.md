@@ -3,9 +3,16 @@
 
 This is a [Sublime Text](http://www.sublimetext.com/) auto-complete package for use with [Cucumber](https://cucumber.io/)'s [Gherkin](https://cucumber.io/docs/reference#gherkin) language. This package will catalog Gherkin step definitions from the `*.feature` files of the selected directories and provide auto-complete suggestions based on the catalogued steps.
 
-![example](/img/sublime_gherkin_auto_complete_plus.gif)
+## Examples
 
-*(apparently math isn't my forte)* :wink:
+** Auto-Complete **
+
+![auto_complete](/img/auto_complete.gif)
+
+** Fuzzy-searching steps **
+
+![example](/img/list_steps_command.gif)
+
 
 
 ## Usage Info
