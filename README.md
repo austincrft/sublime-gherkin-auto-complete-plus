@@ -27,23 +27,23 @@ The settings file for this package can be accessed from the toolbar via `Prefere
 
 ```javascript
 {
-// A collection of ADDITIONAL directories containing the features files you would like to scan
-// The directories listed here will be scanned IN ADDITION to the folder(s) open in Sublime Text
-"feature_file_directories":
-[
-"path/to/feature/files/directory",
-"some/path/to/different/feature/files/directory"
-],
+    // A collection of ADDITIONAL directories containing the features files you would like to scan
+    // The directories listed here will be scanned IN ADDITION to the folder(s) open in Sublime Text
+    "feature_file_directories":
+    [
+        "path/to/feature/files/directory",
+        "some/path/to/different/feature/files/directory"
+    ],
 
-// Logging for execution information -- this will output to the Sublime Text Console
-// You can view the console by going to the toolbar and selecting `View -> Show Console`
-// Valid options:
-// DEBUG - Detailed information for debugging
-// INFO - Confirmation that things are working as expected
-// WARNING - An indication something might fail in the future
-// ERROR - An error occurred, likely a recoverable one
-// CRITICAL - A non-recoverable error -- execution will stop
-"logging_level": "error"
+    // Logging for execution information -- this will output to the Sublime Text Console
+    // You can view the console by going to the toolbar and selecting `View -> Show Console`
+    // Valid options:
+    // DEBUG - Detailed information for debugging
+    // INFO - Confirmation that things are working as expected
+    // WARNING - An indication something might fail in the future
+    // ERROR - An error occurred, likely a recoverable one
+    // CRITICAL - A non-recoverable error -- execution will stop
+    "logging_level": "error"
 }
 ```
 
