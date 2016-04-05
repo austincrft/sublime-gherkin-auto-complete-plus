@@ -1,8 +1,8 @@
+import fnmatch
 import glob
 import logging
-import re
 import os
-import fnmatch
+import re
 
 from .log_utilities import log_function
 

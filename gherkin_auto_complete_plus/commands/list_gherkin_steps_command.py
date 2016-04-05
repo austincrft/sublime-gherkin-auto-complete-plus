@@ -2,8 +2,8 @@ import sublime
 import sublime_plugin
 
 from ..gherkin_event_listener import steps as catalogued_steps
-from ..utilities.log_utilities import log_function, get_logger
 from ..utilities import log_utilities, settings
+from ..utilities.log_utilities import get_logger, log_function
 
 
 class ListGherkinStepsCommand(sublime_plugin.WindowCommand):
