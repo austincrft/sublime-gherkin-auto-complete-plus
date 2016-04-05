@@ -1,6 +1,8 @@
 import glob
 import logging
 import re
+import os
+import fnmatch
 
 from .log_utilities import log_function
 
@@ -13,19 +15,24 @@ class GherkinParser:
         self.format_steps = log_function(logging_level)(self.format_steps)
 
     def get_feature_files(self, directories):
-        """ Gets all *.feature files under the provided directories
+        """ Gets the fully-qualified path of all  *.feature files under
+            the provided directories (recursive)
 
-        :param [str] directories: a list of directory names
-        :rtype: set of (str, str)
+        :param [str] directories: list of directory names
+        :rtype: list of str
         """
         if directories is None:
             directories = []
 
         files = []
-        for path in directories:
-            if not path.endswith('/'):
-                path += '/'
-            files.extend(glob.glob(path + '*.feature'))
+        for directory in directories:
+            if not directory.endswith('/'):
+                directory += '/'
+
+            for root, dirnames, filenames in os.walk(directory):
+                for filename in fnmatch.filter(filenames, '*.feature'):
+                    files.append(os.path.join(root, filename))
+
         return files
 
     def get_steps(self, files):
