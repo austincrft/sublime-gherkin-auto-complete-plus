@@ -7,11 +7,20 @@ import sublime_plugin
 from .utilities import gherkin_parser as gp
 from .utilities import log_utilities, settings
 
-directories_error = ('Gherkin Auto-Complete Plus:\n\nNo directories are open in'
-                     ' Sublime Text and no additional directories were specified'
-                     ' in the Package Settings. The settings for this package'
-                     ' can be accessed by going to \n\nPreferences -> Package'
-                     ' Settings -> Gherkin Auto-Complete Plus -> Settings - User')
+_directories_error = (
+    'Gherkin Auto-Complete Plus:\n\nNo directories are open in Sublime Text'
+    ' and no additional directories were specified in the Package Settings.'
+    ' The settings for this package can be accessed by going to \n\nPreferences'
+    ' -> Package Settings -> Gherkin Auto-Complete Plus -> Settings - User'
+)
+
+_no_window_directories_error = (
+    'Gherkin Auto-Complete Plus:\n\nYou have chosen to use only the directories'
+    ' specified in the `feature_file_directories` option, but you have not'
+    ' supplied any. The settings for this package can be accessed by going to'
+    ' \n\nPreferences -> Package Settings -> Gherkin Auto-Complete Plus ->'
+    ' Settings - User'
+)
 
 keywords = ['given', 'when', 'then']
 completions = {}
@@ -91,15 +100,25 @@ class GherkinEventListener(sublime_plugin.EventListener):
         """ Executes the 'run' method of the 'update_steps' module
             and stores the results in the 'steps' variable
         """
-        window = view.window()
-        target_directories = window.folders()
+        target_directories = []
+        ignore_open_directories = settings.ignore_open_directories()
 
-        # Add directories manually specified in settings
-        additional_directories = settings.get_feature_directories()
-        target_directories.extend(additional_directories)
+        if ignore_open_directories is None:
+            return
+
+        # Skip open folds in Sublime Text if option is enabled
+        if not ignore_open_directories:
+            window = view.window()
+            target_directories.extend(window.folders())
+
+        specified_directories = settings.get_feature_directories()
+        target_directories.extend(specified_directories)
 
         if not target_directories:
-            sublime.error_message(directories_error)
+            if ignore_open_directories:
+                sublime.error_message(_no_window_directories_error)
+            else:
+                sublime.error_message(_directories_error)
             return
 
         steps.clear()

@@ -16,7 +16,7 @@ This is a [Sublime Text](http://www.sublimetext.com/) auto-complete package for 
 
 ## Usage Info
 **This package is only compatible with Sublime Text 3. It will not work on Sublime Text 2.**
-- Any folders open in Sublime Text will be searched recursively for `*.feature` files. You can specify additional directories via the package's settings file (see *Options/Settings* below).
+- Any folders open in Sublime Text will be searched recursively for `*.feature` files. You can specify additional directories via the package's settings file *(Note: There is an option to use only these directories)*.
 - Step catalog is updated when the package loads or on the save of a `*.feature` file
 - This package relies on the first word of the line being a keyword (`Given`, `When`, `Then`) in order to give auto-complete suggestions. If a keyword is not found on the current line, the previous one will be used.
 - It is not recommended that this is used alongside [cucumber-sublime-bundle](https://github.com/drewda/cucumber-sublime-bundle), as the bundled auto-complete will interfere with the results. At the moment, I've included the Gherkin syntax files so that this package can be self-contained. I have tried contacting the owner of that bundle, but he is not an easy man to reach.
@@ -34,6 +34,10 @@ The settings file for this package can be accessed from the toolbar via `Prefere
         "path/to/feature/files/directory",
         "some/path/to/different/feature/files/directory"
     ],
+
+    // When this is set to true, the open directories in Sublime Text will be ignored, and only
+    // the directories listed in the `feature_file_directories` option will be used
+    "ignore_open_directories": false,
 
     // Logging for execution information -- this will output to the Sublime Text Console
     // You can view the console by going to the toolbar and selecting `View -> Show Console`
@@ -57,8 +61,7 @@ Differences:
 - Only gives suggestions for current step-type (if the line starts with `Given`, then only `Given` steps will be suggested)
 - Steps are formatted in snippet-notation to allow tabbing to values
 - Table rows are not catalogued, which are unlikely to be duplicated exactly
-- Values in between quotes (single and double), less- and greater-than signs, and numbers in 'integer' and 'decimal' format are standardized to remove duplicates from the step list
-- A list of directories are specified explicitly instead of scanning all the folders and files open in Sublime Text (can be an issue for large projects)
+- Values in between quotes (single and double), less- and greater-than signs, and numbers in 'integer' and 'decimal' format are ignored to remove duplicates from the step list
 
 
 ## Isn't the name 'Gherkin Auto-Complete *Plus*' a bit arrogant?
@@ -68,7 +71,9 @@ Absolutely, yes. It's intended to be tongue-in-cheek, but also I couldn't think 
 ## Installation
 
 #### Automatic - via [Package Control](https://packagecontrol.io/)
+```
 Search for 'Gherkin Auto-Complete Plus'
+```
 
 #### Mac OSX
 ``` bash
