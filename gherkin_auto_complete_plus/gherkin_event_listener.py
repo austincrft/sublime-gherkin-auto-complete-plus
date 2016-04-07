@@ -7,15 +7,18 @@ import sublime_plugin
 from .utilities import gherkin_parser as gp
 from .utilities import log_utilities, settings
 
+directories_error = ('Gherkin Auto-Complete Plus:\n\nNo directories are open in'
+                     ' Sublime Text and no additional directories were specified'
+                     ' in the Package Settings. The settings for this package'
+                     ' can be accessed by going to \n\nPreferences -> Package'
+                     ' Settings -> Gherkin Auto-Complete Plus -> Settings - User')
+
 keywords = ['given', 'when', 'then']
 completions = {}
 steps = []
 
-
 class GherkinEventListener(sublime_plugin.EventListener):
-    """
-    Sublime Text Event Listener
-    """
+    """ Sublime Text Event Listener """
 
     def __init__(self):
         self.first_modify = True
@@ -42,7 +45,7 @@ class GherkinEventListener(sublime_plugin.EventListener):
             self._logger = log_utilities.get_logger(__name__, self._logging_level)
 
             # Update steps
-            self._update_steps()
+            self._update_steps(view)
             self.first_modify = False
 
         view.settings().set('auto_complete', False)
@@ -82,22 +85,28 @@ class GherkinEventListener(sublime_plugin.EventListener):
         :param sublime.View view: the sublime view
         """
         if self._is_feature_file(view):
-            self._update_steps()
+            self._update_steps(view)
 
-    def _update_steps(self):
+    def _update_steps(self, view):
         """ Executes the 'run' method of the 'update_steps' module
             and stores the results in the 'steps' variable
         """
-        feature_directories = settings.get_feature_directories()
+        window = view.window()
+        target_directories = window.folders()
 
-        if not feature_directories:
+        # Add directories manually specified in settings
+        additional_directories = settings.get_feature_directories()
+        target_directories.extend(additional_directories)
+
+        if not target_directories:
+            sublime.error_message(directories_error)
             return
 
         steps.clear()
 
         parser = gp.GherkinParser(self._logging_level)
 
-        new_steps = parser.run(feature_directories)
+        new_steps = parser.run(target_directories)
         steps.extend(new_steps)
 
     def _is_feature_file(self, view):

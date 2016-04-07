@@ -1,8 +1,8 @@
 {
-    // A collection of the directories containing the features files you would like to scan
+    // A collection of ADDITIONAL directories containing the features files you would like to scan
+    // The directories listed here will be scanned IN ADDITION to the folder(s) open in Sublime Text
     "feature_file_directories":
     [
-      // Uncomment this and alter the path
       // "path/to/featurefiles/directory",
     ],
 
