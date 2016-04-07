@@ -44,7 +44,7 @@ class GherkinParser:
         for file in files:
             close_file = False
             if not hasattr(file, 'read'):
-                file = open(file)
+                file = open(file, encoding='utf-8')
                 close_file = True
 
             last_main_word = ''
