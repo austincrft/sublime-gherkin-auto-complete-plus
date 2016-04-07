@@ -1,0 +1,22 @@
+**Gherkin Auto-Complete Plus has been updated to version 1.2.0**
+
+Changes
+=======
+
+* There is a new Sublime Text command for fuzzy-searching through the catalogued
+  auto-complete suggestions.
+
+* It is no longer necessary to specify the feature file directories explicitly.
+  Any folders open in Sublime Text will be searched recursively for `*.feature`
+  filesThis will help users that have more than one project with Gherkin steps.
+  This way, steps from a different project won't pollute the auto-complete list.
+  (NOTE: additional directories can be specified via the `feature_file_directories`
+  option).
+
+* For large projects where recursively checking the filetree for `*.feature` files
+  would cause poor performance, there is an `ignore_open_directories` option. If this
+  option is selected, only the directories in the `feature_file_directories` will
+  be scanned.
+
+For more information on these changes, view the README at
+https://github.com/austincrft/sublime-gherkin-auto-complete-plus
