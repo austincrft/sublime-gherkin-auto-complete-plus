@@ -236,11 +236,12 @@ class GherkinEventListener(sublime_plugin.EventListener):
                     break
 
         if not last_keyword:
-            self._logger.warning("Could not find 'Given', 'When', or 'Then' in text.")
+            self._logger.warning("Could not find 'Given', 'When', 'Then', "
+                                 "or '*' in text.")
             return
 
         for step_type, step in steps:
-            if step_type == last_keyword:
+            if last_keyword == '*' or step_type in ('all', last_keyword):
                 # If only keyword is typed, provide all steps for keyword
                 if len(current_line_words) == 1:
                     step_format = self._format_step(step)
