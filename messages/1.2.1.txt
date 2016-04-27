@@ -1,0 +1,12 @@
+**Gherkin Auto-Complete Plus has been updated to version 1.2.1**
+
+Changes
+=======
+
+
+* Added support for the keyword `*`. When this keyword is used, it will be
+  available for all step-types (`Given`, `When`, `Then`). Conversely, all
+  steps will be available in the suggestions when the line starts with `*`.
+
+For more information on these changes, view the README at
+https://github.com/austincrft/sublime-gherkin-auto-complete-plus
