@@ -32,7 +32,8 @@ class TestUpdateSteps(unittest.TestCase):
                     When I give the cashier 2 dollars
                     And I say 'Good Morning!'
                     Then I should receive the <AMAZING> coffee
-                    And I should receive 0.50 in change"""
+                    And I should receive 0.50 in change
+                    * here is an asterisk step"""
         )
         actual = self.gp.get_steps([sio])
         expected = set([
@@ -41,7 +42,8 @@ class TestUpdateSteps(unittest.TestCase):
             ('when', 'I give the cashier 2 dollars'),
             ('when', "I say 'Good Morning!'"),
             ('then', 'I should receive the <AMAZING> coffee'),
-            ('then', 'I should receive 0.50 in change')
+            ('then', 'I should receive 0.50 in change'),
+            ('all', 'here is an asterisk step')
         ])
         self.assertEqual(actual, expected)
 
@@ -52,7 +54,8 @@ class TestUpdateSteps(unittest.TestCase):
                 Scenario: Buy first Coffee
                     Given there is a coffee named "Sublime"
                     When I give the cashier 2 dollars
-                    Then I should receive the <AMAZING> coffee"""
+                    Then I should receive the <AMAZING> coffee
+                    * here is an asterisk step"""
         )
         sio2 = io.StringIO(
             """Feature: More Coffee Testing
@@ -60,16 +63,19 @@ class TestUpdateSteps(unittest.TestCase):
                 Scenario: Buy first Coffee
                     Given some different steps
                     When I type more steps
-                    Then I get more steps"""
+                    Then I get more steps
+                    * another asterisk step"""
         )
         actual = self.gp.get_steps([sio1, sio2])
         expected = set([
             ('given', 'there is a coffee named "Sublime"'),
             ('when', 'I give the cashier 2 dollars'),
             ('then', 'I should receive the <AMAZING> coffee'),
+            ('all', 'here is an asterisk step'),
             ('given', 'some different steps'),
             ('when', 'I type more steps'),
-            ('then', 'I get more steps')
+            ('then', 'I get more steps'),
+            ('all', 'another asterisk step')
         ])
         self.assertEqual(actual, expected)
 

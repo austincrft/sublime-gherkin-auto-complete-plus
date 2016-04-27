@@ -21,6 +21,7 @@ This is a [Sublime Text](http://www.sublimetext.com/) auto-complete package for 
 - Any folders open in Sublime Text will be searched recursively for `*.feature` files. You can specify additional directories via the package's settings file *(Note: There is an option to use only these directories)*.
 - Step catalog is updated when the package loads or on the save of a `*.feature` file
 - This package relies on the first word of the line being a keyword (`Given`, `When`, `Then`) in order to give auto-complete suggestions. If a keyword is not found on the current line, the previous one will be used.
+- If the first word on a line is an asterisk (`*`), that step will show up under all other step types (`Given`, `When`, `Then`)
 - It is not recommended that this is used alongside [cucumber-sublime-bundle](https://github.com/drewda/cucumber-sublime-bundle), as the bundled auto-complete will interfere with the results. At the moment, I've included the Gherkin syntax files so that this package can be self-contained. I have tried contacting the owner of that bundle, but he is not an easy man to reach.
 
 

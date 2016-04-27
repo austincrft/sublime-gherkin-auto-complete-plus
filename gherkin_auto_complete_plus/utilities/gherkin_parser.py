@@ -68,6 +68,9 @@ class GherkinParser:
 
                 if first_word in main_words:
                     last_main_word = first_word.lower()
+                elif first_word == '*':
+                    # Asterisk steps will show up for all keywords
+                    last_main_word = 'all'
                 elif first_word in extra_words:
                     pass
                 else:
